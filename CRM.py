@@ -141,7 +141,7 @@ class AddCustomerWindow(QWidget):
         address = self.address_input.text()
 
         if not name or not email or not phone or not address:
-            QMessageBox.warning(self, "Please fill in all fields.")
+            QMessageBox.warning(self, "Warning","Please fill in all fields.")
             return
 
         self.cursor.execute(
@@ -149,7 +149,7 @@ class AddCustomerWindow(QWidget):
             (name, email, phone, address)
         )
         self.connection.commit()
-        QMessageBox.information(self, "Customer added successfully!")
+        QMessageBox.information(self,"Successful", "Customer added successfully!")
         self.close()
 
 
@@ -224,7 +224,7 @@ class SearchCustomerWindow(QWidget):
         name = self.search_input.text()
 
         if not name:
-            QMessageBox.warning(self, "Please enter the customer name.")
+            QMessageBox.warning(self,"Warning" ,"Please enter the customer name.")
             return
 
         query = "SELECT name, phone, email, address FROM crelation WHERE name LIKE %s"
@@ -232,7 +232,7 @@ class SearchCustomerWindow(QWidget):
         results = self.cursor.fetchall()
 
         if not results:
-            QMessageBox.warning(self, "No customer found!")
+            QMessageBox.warning(self, "Warning ","No customer found!")
             return
 
         # --------------------- Final Results ---------------------
@@ -304,7 +304,7 @@ class UpdateCustomerWindow(QWidget):
         new_address = self.address_input.text()
 
         if not previous_name:
-            QMessageBox.warning(self, "Please enter the previous customer name.")
+            QMessageBox.warning(self, "Warning","Please enter the previous customer name.")
             return
 
         self.cursor.execute(
@@ -314,7 +314,7 @@ class UpdateCustomerWindow(QWidget):
         existing = self.cursor.fetchone()
 
         if not existing:
-            QMessageBox.information(self, "No customer found with that name.")
+            QMessageBox.information(self, "Warning","No customer found with that name.")
             return
 
         updated_name = new_name or existing[0]
@@ -332,9 +332,9 @@ class UpdateCustomerWindow(QWidget):
         self.connection.commit()
 
         if self.cursor.rowcount == 0:
-            QMessageBox.warning(self, "Customer data was already up-to-date.")
+            QMessageBox.warning(self, "Warning","Customer data was already up-to-date.")
         else:
-            QMessageBox.information(self, "Customer updated successfully.")
+            QMessageBox.information(self, "Successful","Customer updated successfully.")
             self.prev_input_name.clear()
             self.name_input.clear()
             self.phone_input.clear()
@@ -378,14 +378,14 @@ class DeleteCustomerWindow(QWidget):
         name = self.delete_input.text()
 
         if not name:
-            QMessageBox.warning(self, "Please enter a customer name.")
+            QMessageBox.warning(self,"Warning", "Please enter a customer name.")
             return
 
         self.cursor.execute("SELECT * FROM crelation WHERE name = %s", (name,))
         result = self.cursor.fetchone()
 
         if not result:
-            QMessageBox.information(self, "No customer found with that name.")
+            QMessageBox.information(self,"Warning", "No customer found with that name.")
             return
 
         reply = QMessageBox.question(
@@ -398,10 +398,10 @@ class DeleteCustomerWindow(QWidget):
         if reply == QMessageBox.Yes:
             self.cursor.execute("DELETE FROM crelation WHERE name = %s", (name,))
             self.connection.commit()
-            QMessageBox.information(self, "Customer deleted successfully.")
+            QMessageBox.information(self, "Successful ","Customer deleted successfully.")
             self.delete_input.clear()
         else:
-            QMessageBox.information(self, "Customer was not deleted.")
+            QMessageBox.information(self, "Warning","Customer was not deleted.")
 
 
 # ---------------------- Run Application -------------------------
